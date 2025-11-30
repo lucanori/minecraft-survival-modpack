@@ -1,0 +1,86 @@
+name: Build Modrinth Pack
+
+on:
+  push:
+    paths:
+      - "pack.toml"
+      - "index.toml"
+      - ".packwizignore"
+      - "mods/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "pack.toml"
+      - "index.toml"
+      - ".packwizignore"
+      - "mods/**"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and export pack
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21.x"
+      
+      - name: Install packwiz
+        run: |
+          GOBIN=${{ github.workspace }}/bin go install github.com/packwiz/packwiz@latest
+          echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+      
+      - name: Capture pack metadata
+        id: pack_meta
+        run: |
+          python3 << 'EOF'
+          import tomllib
+          import re
+          import os
+          
+          with open('pack.toml', 'rb') as f:
+              data = tomllib.load(f)
+          
+          name = data['name']
+          version = data['version']
+          slug = re.sub(r'[^a-zA-Z0-9]', '-', name.lower())
+          export_path = f"build/{slug}-{version}.mrpack"
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"name={name}\n")
+              f.write(f"version={version}\n")
+              f.write(f"slug={slug}\n")
+              f.write(f"export_path={export_path}\n")
+          EOF
+      
+      - name: Export Modrinth pack
+        run: |
+          mkdir -p "$(dirname "${{ steps.pack_meta.outputs.export_path }}")"
+          packwiz modrinth export --output "${{ steps.pack_meta.outputs.export_path }}"
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: modrinth-pack
+          path: ${{ steps.pack_meta.outputs.export_path }}
+      
+      - name: Publish to Modrinth
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: ${{ steps.pack_meta.outputs.export_path }}
+          name: ${{ steps.pack_meta.outputs.name }} ${{ steps.pack_meta.outputs.version }}
+          version: ${{ steps.pack_meta.outputs.version }}
+          changelog: ${{ github.event.head_commit.message }}
