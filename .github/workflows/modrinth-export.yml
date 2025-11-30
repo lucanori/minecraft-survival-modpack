@@ -69,7 +69,7 @@ jobs:
           packwiz modrinth export --output "${{ steps.pack_meta.outputs.export_path }}"
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: modrinth-pack
           path: ${{ steps.pack_meta.outputs.export_path }}
