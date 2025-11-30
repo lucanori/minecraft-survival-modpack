@@ -1,8 +1,16 @@
 hash-format = "sha256"
 
 [[files]]
+file = ".github/dependabot.yml"
+hash = "ff5a7a2bb54a9897229c2e80ec8a469828eb6819ceceec5f122fa4c227190797"
+
+[[files]]
+file = ".github/workflows/modrinth-export.yml"
+hash = "43370cd935c6ebedea48a4e8f42ffec3707e1a304fa0dda7499ed06c5ee227c3"
+
+[[files]]
 file = "LICENSE"
-hash = "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673"
+hash = "ce07283bcb55bf85ac202ddf615134fd689b0222377cb9c8e8eb3ba171b4e2d6"
 
 [[files]]
 file = "mods/architectury-api.pw.toml"
@@ -65,6 +73,11 @@ hash = "cbda4f1881cfb9f054395a3db225df4202d1f2e7bd0ed27d803b837fcf728621"
 metafile = true
 
 [[files]]
+file = "mods/forge-config-api-port.pw.toml"
+hash = "d74f72f3bf13c4ef7d60b6e2defecd3c7af77ed9be7764cf1ed10ea1fd707a1f"
+metafile = true
+
+[[files]]
 file = "mods/jamlib.pw.toml"
 hash = "bdca3c9a098de3c08f996b214cf10ece27351f5f7871c30ff826a2f404daba33"
 metafile = true
@@ -116,7 +129,7 @@ metafile = true
 
 [[files]]
 file = "mods/puzzles-lib.pw.toml"
-hash = "4345889c03219d385b9f1ebad4cb7f19e017575b1a2097f0be32265cee148548"
+hash = "bedbd2675abf6bdb06c80570ba63d88e08caf7bb431d01e446d8770a5c62a9fb"
 metafile = true
 
 [[files]]

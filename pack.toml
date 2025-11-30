@@ -1,12 +1,12 @@
 name = "Homiescraft Survival"
 author = "lucanori"
-version = "1.0.0"
+version = "1.0.1"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "71a156d5b43fb92611ce7e5b79a29dad71f478cc0d319fd0f171c70de2114605"
+hash = "74f9b2d99318b00842d194faa77096b4c11b7e82db5df67928fb32c5cef361ff"
 
 [versions]
 fabric = "0.18.1"
