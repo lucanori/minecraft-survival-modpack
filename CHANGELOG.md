@@ -1,3 +1,10 @@
+# [1.0.0-alpha.2](https://github.com/lucanori/minecraft-survival-modpack/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2025-12-04)
+
+
+### Bug Fixes
+
+* set correct ci user ([032beeb](https://github.com/lucanori/minecraft-survival-modpack/commit/032beebea7e9286aca91ae4fea14f2be4e7b4e8b))
+
 # 1.0.0-alpha.1 (2025-12-04)
 
 
