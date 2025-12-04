@@ -10,7 +10,9 @@ permissions:
 jobs:
   package:
     runs-on: ubuntu-latest
-    container: ghcr.io/lucanori/coder-templates:latest
+    container: 
+      image: ghcr.io/lucanori/coder-templates:latest
+      options: --user coder
     env:
       RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
     
