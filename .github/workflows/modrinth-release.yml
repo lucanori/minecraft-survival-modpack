@@ -1,0 +1,101 @@
+name: Release Modrinth Pack
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    container: ghcr.io/lucanori/coder-templates:latest
+    env:
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.target_commitish }}
+          token: ${{ env.RELEASE_TOKEN }}
+      
+      - name: Sync pack version
+        id: sync_version
+        run: |
+          release_tag="${{ github.event.release.tag_name }}"
+          version=$(echo "$release_tag" | sed 's/^[vV]//')
+          
+          current_version=$(grep '^version\s*=' pack.toml | sed 's/version\s*=\s*"\(.*\)"/\1/')
+          
+          if [ -z "$current_version" ]; then
+            echo "Error: version entry not found in pack.toml"
+            exit 1
+          fi
+          
+          changed=false
+          
+          if [ "$current_version" != "$version" ]; then
+            # Update version in pack.toml only when changed
+            sed -i "s/^version\s*=.*/version = \"$version\"/" pack.toml
+            changed=true
+          fi
+          
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
+      
+      - name: Commit pack version
+        if: steps.sync_version.outputs.changed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add pack.toml
+          git commit -m "chore: sync pack version to ${{ steps.sync_version.outputs.version }} [skip ci]"
+          git push origin ${{ github.event.release.target_commitish }}
+      
+      - name: Verify packwiz installation
+        run: packwiz --version
+      
+      - name: Capture pack metadata
+        id: pack_meta
+        run: |
+          python3 << 'EOF'
+          import tomllib
+          import re
+          import os
+          
+          with open('pack.toml', 'rb') as f:
+              data = tomllib.load(f)
+          
+          name = data['name']
+          version = data['version']
+          slug = re.sub(r'[^a-zA-Z0-9]', '-', name.lower())
+          export_path = f"build/{slug}-{version}.mrpack"
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"name={name}\n")
+              f.write(f"version={version}\n")
+              f.write(f"slug={slug}\n")
+              f.write(f"export_path={export_path}\n")
+          EOF
+      
+      - name: Export Modrinth pack
+        run: |
+          mkdir -p "$(dirname "${{ steps.pack_meta.outputs.export_path }}")"
+          packwiz modrinth export --output "${{ steps.pack_meta.outputs.export_path }}"
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: modrinth-pack
+          path: ${{ steps.pack_meta.outputs.export_path }}
+      
+      - name: Attach to release
+        env:
+          GITHUB_TOKEN: ${{ env.RELEASE_TOKEN }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.pack_meta.outputs.export_path }}
+          tag_name: ${{ github.event.release.tag_name }}

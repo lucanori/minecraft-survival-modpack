@@ -21,6 +21,7 @@ jobs:
   build:
     name: Build and export pack
     runs-on: ubuntu-latest
+    container: ghcr.io/lucanori/coder-templates:latest
     permissions:
       contents: write
     
@@ -30,15 +31,8 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.21.x"
-      
-      - name: Install packwiz
-        run: |
-          GOBIN=${{ github.workspace }}/bin go install github.com/packwiz/packwiz@latest
-          echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+      - name: Verify packwiz installation
+        run: packwiz --version
       
       - name: Capture pack metadata
         id: pack_meta
@@ -73,14 +67,3 @@ jobs:
         with:
           name: modrinth-pack
           path: ${{ steps.pack_meta.outputs.export_path }}
-      
-      - name: Publish to Modrinth
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          files: ${{ steps.pack_meta.outputs.export_path }}
-          name: ${{ steps.pack_meta.outputs.name }} ${{ steps.pack_meta.outputs.version }}
-          version: ${{ steps.pack_meta.outputs.version }}
-          changelog: ${{ github.event.head_commit.message }}
