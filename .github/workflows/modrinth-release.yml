@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: ghcr.io/lucanori/coder-templates:latest
-      options: --user coder
+      options: --user 0
     env:
       RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
     
