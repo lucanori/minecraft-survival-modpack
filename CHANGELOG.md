@@ -1,3 +1,10 @@
+# [1.0.0-alpha.3](https://github.com/lucanori/minecraft-survival-modpack/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* test run with root user in ci ([b0ebb90](https://github.com/lucanori/minecraft-survival-modpack/commit/b0ebb90c5681b84b729f7b5d156e7c9de7e40384))
+
 # [1.0.0-alpha.2](https://github.com/lucanori/minecraft-survival-modpack/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2025-12-04)
 
 
