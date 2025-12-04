@@ -33,11 +33,6 @@ hash = "b6986c7bdec6840b8a344b4028b0a52be10460f2630223ca88db681b36cd5efa"
 metafile = true
 
 [[files]]
-file = "mods/chunky.pw.toml"
-hash = "64badefe03082699f587274a31d1f0793583a4d88aac8ea2226162f80783fb52"
-metafile = true
-
-[[files]]
 file = "mods/cloth-config.pw.toml"
 hash = "717d8ac591dba59be4767a179e1359747561e54ccfcac42161fd6bf54339a78b"
 metafile = true
@@ -78,6 +73,11 @@ hash = "d74f72f3bf13c4ef7d60b6e2defecd3c7af77ed9be7764cf1ed10ea1fd707a1f"
 metafile = true
 
 [[files]]
+file = "mods/item-scroller.pw.toml"
+hash = "3ceeca043fd967760acb5698a1611fa50cd4c1a2bc6419d777a9dc53f30da480"
+metafile = true
+
+[[files]]
 file = "mods/jamlib.pw.toml"
 hash = "bdca3c9a098de3c08f996b214cf10ece27351f5f7871c30ff826a2f404daba33"
 metafile = true
@@ -115,6 +115,11 @@ metafile = true
 [[files]]
 file = "mods/malilib.pw.toml"
 hash = "df5ce30f6ac464f7b06400e03568d2b9087dd1849fd8c21a2381fe2f666338b6"
+metafile = true
+
+[[files]]
+file = "mods/minihud.pw.toml"
+hash = "ae2060c6233ba1715c06f687148af5b2fbd9ac511c28d653fe2887ad7ecb1fc1"
 metafile = true
 
 [[files]]
