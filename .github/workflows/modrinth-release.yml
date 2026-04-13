@@ -98,7 +98,7 @@ jobs:
       - name: Attach to release
         env:
           GITHUB_TOKEN: ${{ env.RELEASE_TOKEN }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ${{ steps.pack_meta.outputs.export_path }}
           tag_name: ${{ github.event.release.tag_name }}
